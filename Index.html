@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasyakuran Aqiqah - Shuan Azkara Bittara</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tone.js for Lullaby Music Box -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['"Fredoka"', 'sans-serif'],
+                        arabic: ['"Amiri"', 'serif'],
+                    },
+                    colors: {
+                        babyblue: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            200: '#bae0fd',
+                            300: '#7cc8fb',
+                            400: '#38acf7',
+                            500: '#0e91e9',
+                            600: '#0273c7',
+                            700: '#035ca1',
+                            800: '#074f85',
+                            900: '#0c426e',
+                        },
+                        gold: {
+                            light: '#fef3c7',
+                            DEFAULT: '#d97706',
+                            soft: '#f59e0b',
+                            dark: '#b45309'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Animations & Keyframes */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        @keyframes floatReverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(12px) rotate(-2deg); }
+        }
+        @keyframes sway {
+            0%, 100% { transform: rotate(-4deg); }
+            50% { transform: rotate(4deg); }
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.25; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(56, 172, 247, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(56, 172, 247, 0); }
+        }
+        @keyframes driftCloud {
+            0% { transform: translateX(-10%); }
+            50% { transform: translateX(10%); }
+            100% { transform: translateX(-10%); }
+        }
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-float { animation: floatSlow 5s ease-in-out infinite; }
+        .animate-float-reverse { animation: floatReverse 6s ease-in-out infinite; }
+        .animate-sway { animation: sway 4s ease-in-out infinite; transform-origin: top center; }
+        .animate-twinkle { animation: twinkle 3s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulseGlow 2.5s infinite; }
+        .animate-cloud { animation: driftCloud 18s ease-in-out infinite; }
+        .animate-spin-slow { animation: spinSlow 10s linear infinite; }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px -15px rgba(14, 145, 233, 0.12);
+        }
+
+        /* Islamic Arch Shape */
+        .islamic-arch {
+            border-radius: 180px 180px 32px 32px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0effe;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #7cc8fb;
+            border-radius: 9999px;
+        }
+
+        /* Cover transition */
+        #cover-overlay {
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.9s ease;
+        }
+        #cover-overlay.opened {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-babyblue-100 via-babyblue-50 to-white text-slate-700 min-h-screen overflow-x-hidden selection:bg-babyblue-300 selection:text-babyblue-900 relative">
+
+    <!-- ======================== FLOATING BACKGROUND DECORATIONS ======================== -->
+    <div id="stars-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <!-- Floating Clouds Background -->
+    <div class="fixed top-12 left-[-5%] w-64 opacity-40 pointer-events-none z-0 animate-cloud">
+        <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M55 80H155C171.569 80 185 66.5685 185 50C185 34.477 173.21 21.7117 158.095 20.1592C152.362 8.23493 140.145 0 126 0C107.673 0 92.6334 13.8414 90.6929 31.6626C86.0825 29.3358 80.8758 28 75.3333 28C57.4761 28 42.8889 41.8359 42.0402 59.461C32.4264 61.8165 25 70.1169 25 80C25 80 40 80 55 80Z" fill="white"/>
+        </svg>
+    </div>
+    <div class="fixed top-1/3 right-[-8%] w-72 opacity-40 pointer-events-none z-0 animate-cloud" style="animation-delay: -7s;">
+        <svg viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M55 80H155C171.569 80 185 66.5685 185 50C185 34.477 173.21 21.7117 158.095 20.1592C152.362 8.23493 140.145 0 126 0C107.673 0 92.6334 13.8414 90.6929 31.6626C86.0825 29.3358 80.8758 28 75.3333 28C57.4761 28 42.8889 41.8359 42.0402 59.461C32.4264 61.8165 25 70.1169 25 80C25 80 40 80 55 80Z" fill="white"/>
+        </svg>
+    </div>
+
+    <!-- ======================== COVER OVERLAY (LOCK SCREEN) ======================== -->
+    <div id="cover-overlay" class="fixed inset-0 z-50 bg-gradient-to-b from-babyblue-800 via-babyblue-600 to-babyblue-300 flex flex-col items-center justify-between p-6 text-center overflow-hidden">
+        <!-- Decorative Hanging Stars Top -->
+        <div class="w-full max-w-md flex justify-around items-start pointer-events-none opacity-80">
+            <div class="flex flex-col items-center animate-sway">
+                <div class="w-0.5 h-16 bg-amber-200/60"></div>
+                <i class="fa-solid fa-star text-amber-300 text-xl drop-shadow"></i>
+            </div>
+            <div class="flex flex-col items-center animate-sway" style="animation-delay: 1s;">
+                <div class="w-0.5 h-28 bg-amber-200/60"></div>
+                <i class="fa-solid fa-moon text-amber-200 text-2xl drop-shadow"></i>
+            </div>
+            <div class="flex flex-col items-center animate-sway" style="animation-delay: 0.5s;">
+                <div class="w-0.5 h-20 bg-amber-200/60"></div>
+                <i class="fa-solid fa-star text-amber-300 text-lg drop-shadow"></i>
+            </div>
+            <div class="flex flex-col items-center animate-sway" style="animation-delay: 1.5s;">
+                <div class="w-0.5 h-12 bg-amber-200/60"></div>
+                <i class="fa-solid fa-cloud text-white text-2xl drop-shadow"></i>
+            </div>
+        </div>
+
+        <!-- Center Content -->
+        <div class="my-auto max-w-md w-full flex flex-col items-center z-10">
+            <!-- Animated Cute Baby Bear on Crescent Moon SVG -->
+            <div class="w-48 h-48 sm:w-56 sm:h-56 relative mb-4 animate-float">
+                <svg viewBox="0 0 240 240" class="w-full h-full drop-shadow-xl" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Glow behind moon -->
+                    <circle cx="120" cy="120" r="90" fill="rgba(254, 243, 199, 0.15)" />
+                    <!-- Crescent Moon -->
+                    <path d="M165 50C130 58 105 90 105 128C105 168 135 200 175 203C158 214 136 220 113 217C62 211 25 165 31 114C37 63 83 26 134 32C145 33 156 41 165 50Z" fill="#FDE68A" stroke="#F59E0B" stroke-width="3"/>
+                    
+                    <!-- Cute Baby Bear Sitting on Moon -->
+                    <!-- Bear Ears -->
+                    <circle cx="112" cy="88" r="14" fill="#D9A074" stroke="#A67149" stroke-width="2.5"/>
+                    <circle cx="112" cy="88" r="7" fill="#F3D6BE"/>
+                    <circle cx="158" cy="88" r="14" fill="#D9A074" stroke="#A67149" stroke-width="2.5"/>
+                    <circle cx="158" cy="88" r="7" fill="#F3D6BE"/>
+                    
+                    <!-- Bear Body in Blue Jumpsuit -->
+                    <ellipse cx="135" cy="148" rx="28" ry="26" fill="#7CC8FB" stroke="#0273C7" stroke-width="2.5"/>
+                    <!-- White Heart on Jumpsuit -->
+                    <path d="M135 145 C132 141, 126 143, 126 148 C126 153, 135 158, 135 158 C135 158, 144 153, 144 148 C144 143, 138 141, 135 145 Z" fill="#FFFFFF"/>
+
+                    <!-- Bear Paws & Feet -->
+                    <circle cx="108" cy="140" r="10" fill="#D9A074" stroke="#A67149" stroke-width="2.5"/>
+                    <circle cx="162" cy="140" r="10" fill="#D9A074" stroke="#A67149" stroke-width="2.5"/>
+                    <ellipse cx="118" cy="172" rx="12" ry="9" fill="#D9A074" stroke="#A67149" stroke-width="2.5"/>
+                    <ellipse cx="152" cy="172" rx="12" ry="9" fill="#D9A074" stroke="#A67149" stroke-width="2.5"/>
+
+                    <!-- Bear Head -->
+                    <circle cx="135" cy="110" r="28" fill="#D9A074" stroke="#A67149" stroke-width="2.5"/>
+                    
+                    <!-- Baby Nightcap (Blue) -->
+                    <path d="M110 96 C115 70, 155 70, 165 98 C175 102, 185 115, 178 122 C170 118, 162 105, 158 100 Z" fill="#38ACF7" stroke="#0273C7" stroke-width="2.5"/>
+                    <circle cx="180" cy="122" r="7" fill="#FFFFFF" stroke="#0273C7" stroke-width="2"/>
+
+                    <!-- Bear Snout -->
+                    <ellipse cx="135" cy="116" rx="11" ry="8" fill="#FFFBEB"/>
+                    <ellipse cx="135" cy="113" rx="4.5" ry="3" fill="#5C3A21"/>
+                    <path d="M135 116 L135 120 M131 120 Q135 123 139 120" stroke="#5C3A21" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+                    <!-- Bear Eyes & Rosy Cheeks -->
+                    <circle cx="123" cy="107" r="3" fill="#3E2723"/>
+                    <circle cx="147" cy="107" r="3" fill="#3E2723"/>
+                    <ellipse cx="117" cy="114" rx="5" ry="3" fill="#FDA4AF" opacity="0.7"/>
+                    <ellipse cx="153" cy="114" rx="5" ry="3" fill="#FDA4AF" opacity="0.7"/>
+
+                    <!-- Soft Fluffy Cloud at bottom -->
+                    <path d="M55 205 H185 C198 205 208 195 208 182 C208 170 199 161 187 160 C182 148 170 140 156 140 C142 140 130 148 125 160 C120 156 113 154 106 154 C91 154 79 165 78 180 C65 181 55 192 55 205 Z" fill="#FFFFFF" opacity="0.95"/>
+                </svg>
+            </div>
+
+            <span class="px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 border border-white/30">
+                Undangan Tasyakuran Aqiqah
+            </span>
+
+            <h1 class="font-display text-3xl sm:text-4xl font-bold text-white drop-shadow-md mb-2 tracking-wide">
+                Shuan Azkara Bittara
+            </h1>
+            <p class="text-babyblue-100 text-sm sm:text-base mb-6 font-medium">
+                Selasa, 27 Oktober 2026
+            </p>
+
+            <!-- Guest Box -->
+            <div class="bg-white/90 backdrop-blur-md rounded-2xl p-4 w-full max-w-xs mb-6 shadow-lg border border-white">
+                <p class="text-xs text-slate-500 uppercase tracking-wider mb-1">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+                <p id="guest-name-display" class="font-display text-lg font-bold text-babyblue-800">Tamu Undangan</p>
+                <p class="text-[11px] text-slate-400 mt-1">Di Tempat</p>
+            </div>
+
+            <!-- Open Invitation Button -->
+            <button id="open-btn" onclick="openInvitation()" class="animate-pulse-glow bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-900 font-display font-bold px-8 py-3.5 rounded-full shadow-xl flex items-center gap-3 transition-transform active:scale-95 text-base cursor-pointer">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>Buka Undangan</span>
+            </button>
+        </div>
+
+        <p class="text-xs text-white/75 pb-2">Putra Kedua dari Safriadi Kadir &amp; Sukmawati</p>
+    </div>
+
+    <!-- ======================== FLOATING AUDIO BUTTON & NAVBAR ======================== -->
+    <!-- Music Control Button -->
+    <button id="music-btn" onclick="toggleMusic()" aria-label="Putar Musik" class="fixed bottom-24 right-4 z-40 w-12 h-12 rounded-full bg-white/90 backdrop-blur shadow-lg border-2 border-babyblue-300 text-babyblue-600 flex items-center justify-center hover:scale-105 transition-all cursor-pointer hidden">
+        <i id="music-icon" class="fa-solid fa-music animate-spin-slow"></i>
+    </button>
+
+    <!-- Bottom Quick Navigation -->
+    <nav id="bottom-nav" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full shadow-xl border border-babyblue-200 flex items-center gap-5 sm:gap-8 text-xs font-medium text-slate-600 hidden">
+        <a href="#hero" class="flex flex-col items-center gap-1 hover:text-babyblue-600 transition-colors">
+            <i class="fa-solid fa-baby text-base text-babyblue-500"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="#doa" class="flex flex-col items-center gap-1 hover:text-babyblue-600 transition-colors">
+            <i class="fa-solid fa-hands-praying text-base text-babyblue-500"></i>
+            <span>Doa</span>
+        </a>
+        <a href="#acara" class="flex flex-col items-center gap-1 hover:text-babyblue-600 transition-colors">
+            <i class="fa-solid fa-calendar-day text-base text-babyblue-500"></i>
+            <span>Acara</span>
+        </a>
+        <a href="#ucapan" class="flex flex-col items-center gap-1 hover:text-babyblue-600 transition-colors">
+            <i class="fa-solid fa-comment-dots text-base text-babyblue-500"></i>
+            <span>Ucapan</span>
+        </a>
+    </nav>
+
+    <!-- ======================== MAIN INVITATION CONTENT ======================== -->
+    <main class="relative z-10 max-w-xl mx-auto px-4 pt-8 pb-28">
+
+        <!-- 1. HERO & SALAM SECTION (ISLAMIC ARCH CARD) -->
+        <section id="hero" class="relative mb-10">
+            <!-- Floating Balloons Left & Right -->
+            <div class="absolute -top-4 -left-2 w-20 sm:w-24 z-20 pointer-events-none animate-float">
+                <svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M45 95 Q55 125 65 150" stroke="#CBD5E1" stroke-width="1.5" fill="none"/>
+                    <path d="M75 85 Q68 120 65 150" stroke="#CBD5E1" stroke-width="1.5" fill="none"/>
+                    <ellipse cx="42" cy="52" rx="28" ry="34" fill="#7CC8FB"/>
+                    <ellipse cx="32" cy="40" rx="6" ry="10" transform="rotate(-20 32 40)" fill="white" opacity="0.5"/>
+                    <ellipse cx="75" cy="44" rx="24" ry="29" fill="#FDE68A"/>
+                    <ellipse cx="67" cy="34" rx="5" ry="8" transform="rotate(-20 67 34)" fill="white" opacity="0.6"/>
+                    <circle cx="58" cy="72" r="18" fill="#BAE0FD"/>
+                </svg>
+            </div>
+
+            <div class="absolute -top-4 -right-2 w-20 sm:w-24 z-20 pointer-events-none animate-float-reverse">
+                <svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M75 95 Q65 125 55 150" stroke="#CBD5E1" stroke-width="1.5" fill="none"/>
+                    <path d="M45 85 Q52 120 55 150" stroke="#CBD5E1" stroke-width="1.5" fill="none"/>
+                    <ellipse cx="78" cy="52" rx="28" ry="34" fill="#38ACF7"/>
+                    <ellipse cx="68" cy="40" rx="6" ry="10" transform="rotate(-20 68 40)" fill="white" opacity="0.5"/>
+                    <ellipse cx="45" cy="44" rx="24" ry="29" fill="#FDE68A"/>
+                    <circle cx="62" cy="72" r="18" fill="#E0EFFE"/>
+                </svg>
+            </div>
+
+            <!-- Main Arch Card -->
+            <div class="glass-card islamic-arch pt-14 pb-10 px-6 sm:px-10 text-center relative overflow-hidden border-4 border-white shadow-2xl">
+                <!-- Inner subtle border arch -->
+                <div class="absolute inset-3 islamic-arch border-2 border-dashed border-babyblue-300/70 pointer-events-none"></div>
+
+                <!-- Bismillah Calligraphy -->
+                <div class="reveal active mb-5">
+                    <p class="font-arabic text-3xl sm:text-4xl text-babyblue-900 leading-relaxed drop-shadow-sm">
+                        بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
+                    </p>
+                </div>
+
+                <!-- Intro Text -->
+                <p class="reveal active text-sm sm:text-base text-slate-600 leading-relaxed max-w-md mx-auto mb-6">
+                    Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud mengundang Bapak/Ibu untuk menghadiri acara
+                </p>
+
+                <!-- Event Title Badge -->
+                <div class="reveal active inline-block relative mb-4">
+                    <div class="flex items-center justify-center gap-3 text-babyblue-700 mb-1">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-sm"></i>
+                        <h2 class="font-display text-2xl sm:text-3xl font-bold tracking-wide text-babyblue-800">
+                            Tasyakuran Aqiqah
+                        </h2>
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-sm"></i>
+                    </div>
+                    <!-- Decorative Divider -->
+                    <div class="flex items-center justify-center gap-2 my-2">
+                        <span class="h-[1.5px] w-14 bg-gradient-to-r from-transparent to-babyblue-400"></span>
+                        <i class="fa-solid fa-diamond text-[10px] text-amber-500"></i>
+                        <span class="h-[1.5px] w-14 bg-gradient-to-l from-transparent to-babyblue-400"></span>
+                    </div>
+                    <p class="text-sm sm:text-base font-medium text-slate-600">Anak kedua kami</p>
+                </div>
+
+                <!-- Baby Boy Avatar Frame -->
+                <div class="reveal my-5 flex justify-center">
+                    <div class="relative w-36 h-36 sm:w-40 sm:h-40 rounded-full bg-gradient-to-tr from-babyblue-200 via-babyblue-50 to-amber-100 p-1.5 shadow-lg">
+                        <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-babyblue-300 relative">
+                            <!-- Cute Little Prince Bear with Crown SVG -->
+                            <svg viewBox="0 0 160 160" class="w-32 h-32 animate-float">
+                                <!-- Crown -->
+                                <path d="M58 45 L66 25 L80 38 L94 25 L102 45 Z" fill="#FBBF24" stroke="#D97706" stroke-width="2" stroke-linejoin="round"/>
+                                <circle cx="66" cy="22" r="2.5" fill="#FEF3C7"/>
+                                <circle cx="80" cy="35" r="2.5" fill="#FEF3C7"/>
+                                <circle cx="94" cy="22" r="2.5" fill="#FEF3C7"/>
+                                <!-- Ears -->
+                                <circle cx="52" cy="56" r="14" fill="#D9A074" stroke="#A67149" stroke-width="2"/>
+                                <circle cx="52" cy="56" r="7" fill="#F3D6BE"/>
+                                <circle cx="108" cy="56" r="14" fill="#D9A074" stroke="#A67149" stroke-width="2"/>
+                                <circle cx="108" cy="56" r="7" fill="#F3D6BE"/>
+                                <!-- Head -->
+                                <circle cx="80" cy="80" r="34" fill="#D9A074" stroke="#A67149" stroke-width="2"/>
+                                <!-- Snout -->
+                                <ellipse cx="80" cy="88" rx="14" ry="10" fill="#FFFBEB"/>
+                                <ellipse cx="80" cy="84" rx="5.5" ry="4" fill="#5C3A21"/>
+                                <path d="M80 88 L80 93 M75 93 Q80 97 85 93" stroke="#5C3A21" stroke-width="2" fill="none" stroke-linecap="round"/>
+                                <!-- Eyes -->
+                                <circle cx="66" cy="75" r="3.5" fill="#3E2723"/>
+                                <circle cx="65" cy="74" r="1" fill="#FFFFFF"/>
+                                <circle cx="94" cy="75" r="3.5" fill="#3E2723"/>
+                                <circle cx="93" cy="74" r="1" fill="#FFFFFF"/>
+                                <!-- Cheeks -->
+                                <ellipse cx="58" cy="84" rx="6" ry="3.5" fill="#FDA4AF" opacity="0.6"/>
+                                <ellipse cx="102" cy="84" rx="6" ry="3.5" fill="#FDA4AF" opacity="0.6"/>
+                                <!-- Blue Bowtie & Collar -->
+                                <path d="M50 115 Q80 135 110 115 L118 155 L42 155 Z" fill="#7CC8FB"/>
+                                <path d="M66 114 L80 121 L66 128 Z" fill="#0273C7"/>
+                                <path d="M94 114 L80 121 L94 128 Z" fill="#0273C7"/>
+                                <circle cx="80" cy="121" r="4" fill="#38ACF7"/>
+                            </svg>
+                        </div>
+                        <!-- Floating sparkle badge -->
+                        <span class="absolute -bottom-1 right-2 bg-amber-400 text-slate-900 text-xs font-bold px-3 py-1 rounded-full shadow border border-white flex items-center gap-1">
+                            <i class="fa-solid fa-mars text-babyblue-900"></i> Baby Boy
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Baby Name Highlight -->
+                <div class="reveal my-6">
+                    <h1 class="font-display text-3xl sm:text-4xl font-bold text-babyblue-900 tracking-tight bg-gradient-to-r from-babyblue-800 via-babyblue-600 to-babyblue-800 bg-clip-text text-transparent py-1">
+                        Shuan Azkara Bittara
+                    </h1>
+                </div>
+
+                <!-- Prayer Quote -->
+                <div id="doa" class="reveal bg-babyblue-50/90 border border-babyblue-200 rounded-2xl p-5 sm:p-6 relative my-6 shadow-inner">
+                    <i class="fa-solid fa-quote-left text-2xl text-babyblue-300 absolute top-3 left-4 opacity-60"></i>
+                    <p class="text-sm sm:text-base text-slate-700 italic leading-relaxed relative z-10 px-2">
+                        "Semoga Allah SWT menjadikannya anak yang shalih, berbakti kepada kedua orang tua, berakhlak mulia, serta menjadi pribadi yang bermanfaat bagi agama, bangsa, dan sesama. Aamiin Ya Rabbal 'Alamin."
+                    </p>
+                    <i class="fa-solid fa-quote-right text-2xl text-babyblue-300 absolute bottom-3 right-4 opacity-60"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. COUNTDOWN & EVENT DETAILS SECTION -->
+        <section id="acara" class="reveal glass-card rounded-3xl p-6 sm:p-8 mb-10 text-center relative overflow-hidden">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-babyblue-100 text-babyblue-700 text-xs font-bold uppercase tracking-wider mb-3">
+                <i class="fa-regular fa-clock"></i> Menuju Hari Bahagia
+            </div>
+            <h3 class="font-display text-2xl font-bold text-babyblue-900 mb-6">Waktu &amp; Tempat Acara</h3>
+
+            <!-- Live Countdown Grid -->
+            <div class="grid grid-cols-4 gap-2 sm:gap-4 max-w-md mx-auto mb-8">
+                <div class="bg-gradient-to-b from-babyblue-500 to-babyblue-600 text-white rounded-2xl p-3 shadow-md">
+                    <span id="cd-days" class="font-display text-2xl sm:text-3xl font-bold block">00</span>
+                    <span class="text-[11px] sm:text-xs uppercase tracking-wider opacity-90">Hari</span>
+                </div>
+                <div class="bg-gradient-to-b from-babyblue-500 to-babyblue-600 text-white rounded-2xl p-3 shadow-md">
+                    <span id="cd-hours" class="font-display text-2xl sm:text-3xl font-bold block">00</span>
+                    <span class="text-[11px] sm:text-xs uppercase tracking-wider opacity-90">Jam</span>
+                </div>
+                <div class="bg-gradient-to-b from-babyblue-500 to-babyblue-600 text-white rounded-2xl p-3 shadow-md">
+                    <span id="cd-minutes" class="font-display text-2xl sm:text-3xl font-bold block">00</span>
+                    <span class="text-[11px] sm:text-xs uppercase tracking-wider opacity-90">Menit</span>
+                </div>
+                <div class="bg-gradient-to-b from-amber-400 to-amber-500 text-slate-900 rounded-2xl p-3 shadow-md">
+                    <span id="cd-seconds" class="font-display text-2xl sm:text-3xl font-bold block">00</span>
+                    <span class="text-[11px] sm:text-xs uppercase tracking-wider font-semibold">Detik</span>
+                </div>
+            </div>
+
+            <!-- 3-Column Event Details Matching Original Image -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-left sm:text-center bg-white/90 rounded-2xl p-5 border border-babyblue-100 shadow-sm mb-6">
+                <!-- Hari, Tanggal -->
+                <div class="flex sm:flex-col items-center gap-3.5 sm:gap-2 p-2 sm:border-r border-dashed border-babyblue-200">
+                    <div class="w-11 h-11 rounded-full bg-babyblue-600 text-white flex items-center justify-center shrink-0 shadow">
+                        <i class="fa-regular fa-calendar-check text-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Hari, Tanggal</p>
+                        <p class="font-display font-bold text-slate-800 text-base">Selasa,</p>
+                        <p class="font-bold text-babyblue-700 text-sm">27/10/26</p>
+                        <p class="text-[11px] text-slate-500">(27 Oktober 2026)</p>
+                    </div>
+                </div>
+
+                <!-- Waktu -->
+                <div class="flex sm:flex-col items-center gap-3.5 sm:gap-2 p-2 sm:border-r border-dashed border-babyblue-200 border-t sm:border-t-0 pt-4 sm:pt-2">
+                    <div class="w-11 h-11 rounded-full bg-babyblue-600 text-white flex items-center justify-center shrink-0 shadow">
+                        <i class="fa-regular fa-clock text-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Waktu</p>
+                        <p class="font-display font-bold text-slate-800 text-base">11.00 -</p>
+                        <p class="font-bold text-babyblue-700 text-sm">Selesai</p>
+                        <p class="text-[11px] text-slate-500">WITA</p>
+                    </div>
+                </div>
+
+                <!-- Tempat -->
+                <div class="flex sm:flex-col items-center gap-3.5 sm:gap-2 p-2 border-t sm:border-t-0 border-dashed border-babyblue-200 pt-4 sm:pt-2">
+                    <div class="w-11 h-11 rounded-full bg-babyblue-600 text-white flex items-center justify-center shrink-0 shadow">
+                        <i class="fa-solid fa-house-chimney text-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Tempat</p>
+                        <p class="font-display font-bold text-slate-800 text-base">BTN Pepabri,</p>
+                        <p class="font-bold text-babyblue-700 text-sm">P1/21</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Google Maps Embed -->
+            <div class="w-full h-56 sm:h-64 rounded-2xl overflow-hidden border-2 border-babyblue-200 shadow-inner mb-6 relative bg-babyblue-50">
+                <iframe 
+                    src="https://maps.google.com/maps?q=-3.7937278,119.6384384&hl=id&z=17&output=embed" 
+                    class="w-full h-full border-0" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Lokasi Acara Aqiqah BTN Pepabri P1/21">
+                </iframe>
+            </div>
+
+            <!-- Action Buttons: Copy Address & Google Maps -->
+            <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="copyAddress()" class="px-5 py-2.5 rounded-full bg-babyblue-100 hover:bg-babyblue-200 text-babyblue-800 font-semibold text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer">
+                    <i class="fa-regular fa-copy"></i>
+                    <span>Salin Alamat &amp; Koordinat</span>
+                </button>
+                <a href="https://www.google.com/maps?q=-3.7937278,119.6384384" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-full bg-babyblue-600 hover:bg-babyblue-700 text-white font-semibold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span>Petunjuk Arah Maps</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 3. HONOR MESSAGE & PARENTS SECTION -->
+        <section class="reveal glass-card rounded-3xl p-6 sm:p-8 mb-10 text-center relative overflow-hidden">
+            <!-- Warm Beige Banner Box (Matching Invitation Card) -->
+            <div class="bg-gradient-to-br from-amber-100/90 via-orange-50 to-amber-100/80 border-2 border-amber-200/80 rounded-2xl p-5 sm:p-6 mb-8 shadow-sm relative">
+                <p class="text-sm sm:text-base text-slate-700 font-medium leading-relaxed">
+                    Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu berkenan hadir untuk memberikan doa terbaik bagi putra kami.
+                </p>
+            </div>
+
+            <!-- Parents Signature -->
+            <p class="text-sm sm:text-base text-slate-500 font-medium mb-2">
+                Kami Yang Berbahagia,
+            </p>
+            <h3 class="font-display text-2xl sm:text-3xl font-bold text-babyblue-900 mb-6">
+                Safriadi Kadir &amp; Sukmawati
+            </h3>
+
+            <!-- Cute Teddy Bear Wearing Baby Blanket Illustration -->
+            <div class="flex justify-center my-4">
+                <div class="w-28 h-28 animate-sway">
+                    <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Blue Baby Blanket Hood -->
+                        <path d="M30 80 C25 35, 115 35, 110 80 C115 105, 105 125, 70 125 C35 125, 25 105, 30 80 Z" fill="#BAE0FD" stroke="#7CC8FB" stroke-width="2.5"/>
+                        <!-- Bear Ears peeking -->
+                        <circle cx="45" cy="48" r="11" fill="#D9A074" stroke="#A67149" stroke-width="2"/>
+                        <circle cx="95" cy="48" r="11" fill="#D9A074" stroke="#A67149" stroke-width="2"/>
+                        <!-- Bear Face -->
+                        <circle cx="70" cy="72" r="26" fill="#D9A074" stroke="#A67149" stroke-width="2"/>
+                        <ellipse cx="70" cy="78" rx="11" ry="8" fill="#FFFBEB"/>
+                        <ellipse cx="70" cy="75" rx="4" ry="3" fill="#5C3A21"/>
+                        <circle cx="60" cy="68" r="3" fill="#3E2723"/>
+                        <circle cx="80" cy="68" r="3" fill="#3E2723"/>
+                        <ellipse cx="54" cy="75" rx="4" ry="2.5" fill="#FDA4AF" opacity="0.7"/>
+                        <ellipse cx="86" cy="75" rx="4" ry="2.5" fill="#FDA4AF" opacity="0.7"/>
+                        <!-- Blanket Wrap Bottom -->
+                        <path d="M40 95 Q70 110 100 95 L95 125 L45 125 Z" fill="#E0EFFE" stroke="#7CC8FB" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Decorator Credit Badge -->
+            <div class="mt-4 pt-4 border-t border-babyblue-100 flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-500">
+                <i class="fa-brands fa-instagram text-babyblue-600 text-base"></i>
+                <span class="font-semibold text-slate-700">@amerta.dekorpinrang</span>
+            </div>
+        </section>
+
+        <!-- 4. INTERACTIVE WISHES & PRAYERS WALL (KIRIM DOA) -->
+        <section id="ucapan" class="reveal glass-card rounded-3xl p-6 sm:p-8 relative">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-2">
+                    <i class="fa-solid fa-heart text-amber-500"></i> Doa &amp; Harapan
+                </div>
+                <h3 class="font-display text-2xl font-bold text-babyblue-900">Kirim Ucapan &amp; Doa</h3>
+                <p class="text-xs sm:text-sm text-slate-500 mt-1">Berikan doa terbaik untuk ananda Shuan Azkara Bittara</p>
+            </div>
+
+            <!-- Form -->
+            <form id="wish-form" onsubmit="submitWish(event)" class="space-y-4 mb-8 text-left">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nama Anda</label>
+                    <input type="text" id="sender-name" required placeholder="Contoh: Keluarga Bpk. Ahmad" class="w-full px-4 py-3 rounded-xl border border-babyblue-200 focus:border-babyblue-500 focus:ring-2 focus:ring-babyblue-200 outline-none text-sm bg-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Konfirmasi Kehadiran</label>
+                    <select id="sender-attendance" class="w-full px-4 py-3 rounded-xl border border-babyblue-200 focus:border-babyblue-500 focus:ring-2 focus:ring-babyblue-200 outline-none text-sm bg-white">
+                        <option value="InsyaAllah Hadir">InsyaAllah Hadir</option>
+                        <option value="Belum Pasti">Masih Ragu / Belum Pasti</option>
+                        <option value="Berhalangan Hadir">Maaf, Berhalangan Hadir</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Ucapan &amp; Doa</label>
+                    <textarea id="sender-message" rows="3" required placeholder="Tuliskan doa terbaik untuk Shuan Azkara Bittara..." class="w-full px-4 py-3 rounded-xl border border-babyblue-200 focus:border-babyblue-500 focus:ring-2 focus:ring-babyblue-200 outline-none text-sm bg-white"></textarea>
+                </div>
+                <button type="submit" id="submit-wish-btn" class="w-full bg-gradient-to-r from-babyblue-600 to-babyblue-500 hover:from-babyblue-700 hover:to-babyblue-600 text-white font-display font-bold py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+                    <i id="submit-wish-icon" class="fa-solid fa-paper-plane"></i>
+                    <span id="submit-wish-text">Kirim Doa Terbaik</span>
+                </button>
+            </form>
+
+            <!-- Attendance Summary Counter -->
+            <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2">
+                    <span id="count-hadir" class="font-display font-bold text-emerald-700 text-base block">0</span>
+                    <span class="text-[10px] text-emerald-600 font-semibold">InsyaAllah Hadir</span>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-2">
+                    <span id="count-ragu" class="font-display font-bold text-amber-700 text-base block">0</span>
+                    <span class="text-[10px] text-amber-600 font-semibold">Belum Pasti</span>
+                </div>
+                <div class="bg-rose-50 border border-rose-200 rounded-xl p-2">
+                    <span id="count-absen" class="font-display font-bold text-rose-700 text-base block">0</span>
+                    <span class="text-[10px] text-rose-600 font-semibold">Berhalangan</span>
+                </div>
+            </div>
+
+            <!-- Wishes List Feed -->
+            <div id="wishes-list" class="space-y-3 max-h-72 overflow-y-auto pr-1 text-left">
+                <!-- Wishes loaded from Google Spreadsheet or fallback -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ======================== TOAST NOTIFICATION MESSAGE BOX ======================== -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 backdrop-blur text-white px-5 py-3 rounded-full shadow-xl text-xs sm:text-sm font-medium flex items-center gap-2.5 opacity-0 pointer-events-none transition-all duration-300">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-text">Berhasil disalin!</span>
+    </div>
+
+    <!-- ======================== SCRIPTS ======================== -->
+    <script>
+        // 1. Parse URL Parameter for Guest Name (?to=Nama+Tamu)
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guestName = urlParams.get('to') || urlParams.get('kepada');
+            if (guestName) {
+                document.getElementById('guest-name-display').textContent = guestName;
+            }
+            initStars();
+            renderWishes();
+            startCountdown();
+            initScrollReveal();
+        });
+
+        // 2. Generate Twinkling Stars & Clouds in Background
+        function initStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 24;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const size = Math.random() * 10 + 6;
+                star.className = 'absolute text-amber-400/70 animate-twinkle';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 4}s`;
+                star.style.fontSize = `${size}px`;
+                star.innerHTML = '<i class="fa-solid fa-star"></i>';
+                container.appendChild(star);
+            }
+        }
+
+        // 3. Tone.js Gentle Baby Lullaby Music Box Synthesizer
+        let isPlaying = false;
+        let lullabyLoop = null;
+        let synth = null;
+
+        async function startLullaby() {
+            try {
+                await Tone.start();
+                if (!synth) {
+                    synth = new Tone.PolySynth(Tone.Synth, {
+                        oscillator: { type: "sine" },
+                        envelope: {
+                            attack: 0.02,
+                            decay: 0.8,
+                            sustain: 0.1,
+                            release: 1.5
+                        }
+                    }).toDestination();
+                    synth.volume.value = -10;
+                }
+
+                // Gentle Twinkle / Brahms Lullaby inspired music box notes
+                const melody = [
+                    { time: "0:0", note: "C5", duration: "4n" },
+                    { time: "0:1", note: "C5", duration: "4n" },
+                    { time: "0:2", note: "G5", duration: "4n" },
+                    { time: "0:3", note: "G5", duration: "4n" },
+                    { time: "1:0", note: "A5", duration: "4n" },
+                    { time: "1:1", note: "A5", duration: "4n" },
+                    { time: "1:2", note: "G5", duration: "2n" },
+                    { time: "2:0", note: "F5", duration: "4n" },
+                    { time: "2:1", note: "F5", duration: "4n" },
+                    { time: "2:2", note: "E5", duration: "4n" },
+                    { time: "2:3", note: "E5", duration: "4n" },
+                    { time: "3:0", note: "D5", duration: "4n" },
+                    { time: "3:1", note: "D5", duration: "4n" },
+                    { time: "3:2", note: "C5", duration: "2n" }
+                ];
+
+                if (!lullabyLoop) {
+                    Tone.Transport.bpm.value = 88;
+                    lullabyLoop = new Tone.Part((time, value) => {
+                        synth.triggerAttackRelease(value.note, value.duration, time);
+                    }, melody);
+                    lullabyLoop.loop = true;
+                    lullabyLoop.loopEnd = "4m";
+                }
+
+                Tone.Transport.start();
+                lullabyLoop.start(0);
+                isPlaying = true;
+                updateMusicUI();
+            } catch (e) {
+                console.warn("Audio tidak dapat diputar otomatis:", e);
+            }
+        }
+
+        function toggleMusic() {
+            if (!isPlaying) {
+                startLullaby();
+            } else {
+                Tone.Transport.pause();
+                isPlaying = false;
+                updateMusicUI();
+            }
+        }
+
+        function updateMusicUI() {
+            const icon = document.getElementById('music-icon');
+            if (isPlaying) {
+                icon.className = 'fa-solid fa-music animate-spin-slow text-babyblue-600';
+            } else {
+                icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+            }
+        }
+
+        // 4. Open Invitation Action
+        function openInvitation() {
+            const overlay = document.getElementById('cover-overlay');
+            overlay.classList.add('opened');
+
+            document.getElementById('music-btn').classList.remove('hidden');
+            document.getElementById('bottom-nav').classList.remove('hidden');
+
+            startLullaby();
+        }
+
+        // 5. Countdown Timer to Tuesday, 27 October 2026 11:00 WITA (UTC+8)
+        function startCountdown() {
+            const targetDate = new Date("2026-10-27T11:00:00+08:00").getTime();
+
+            function updateTimer() {
+                const now = new Date().getTime();
+                const diff = targetDate - now;
+
+                if (diff <= 0) {
+                    document.getElementById("cd-days").textContent = "00";
+                    document.getElementById("cd-hours").textContent = "00";
+                    document.getElementById("cd-minutes").textContent = "00";
+                    document.getElementById("cd-seconds").textContent = "00";
+                    return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById("cd-days").textContent = String(days).padStart(2, '0');
+                document.getElementById("cd-hours").textContent = String(hours).padStart(2, '0');
+                document.getElementById("cd-minutes").textContent = String(minutes).padStart(2, '0');
+                document.getElementById("cd-seconds").textContent = String(seconds).padStart(2, '0');
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        // 6. Copy Address to Clipboard (Iframe safe)
+        function copyAddress() {
+            const addressText = "BTN Pepabri, P1/21 (-3.7937278, 119.6384384)";
+            const tempInput = document.createElement("textarea");
+            tempInput.value = addressText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToast("Alamat & titik koordinat berhasil disalin!");
+        }
+
+        // 7. Custom Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // 8. Interactive Wishes & Prayers Feed (Connected to Google Apps Script Spreadsheet)
+        // GANTI URL DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA SETELAH DEPLOY
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqbAl5ikVHScdqQnm59p8_G_fD4rIwKQCTIVDXTlgxqNxKg_1MGdKdrRP39kuyVmNP/exec";
+
+        // Data bawaan (fallback jika URL Spreadsheet belum dipasang)
+        let wishesData = [
+            {
+                name: "Keluarga Besar Amerta Dekor",
+                status: "InsyaAllah Hadir",
+                message: "Barakallahu laka fil mawhubi laka. Semoga ananda Shuan Azkara Bittara tumbuh menjadi anak yang shalih, sehat selalu, dan menjadi kebanggaan keluarga. Aamiin!",
+                time: "Baru saja"
+            },
+            {
+                name: "Sahabat & Kerabat",
+                status: "InsyaAllah Hadir",
+                message: "Selamat atas tasyakuran aqiqah putra keduanya Pak Safriadi & Ibu Sukmawati. Semoga menjadi penyejuk mata dunia akhirat.",
+                time: "1 jam yang lalu"
+            }
+        ];
+
+        function isScriptConfigured() {
+            return SCRIPT_URL && SCRIPT_URL.startsWith("https://script.google.com/macros/s/");
+        }
+
+        function updateAttendanceCounters() {
+            const hadir = wishesData.filter(w => w.status === "InsyaAllah Hadir").length;
+            const ragu = wishesData.filter(w => w.status === "Belum Pasti").length;
+            const absen = wishesData.filter(w => w.status === "Berhalangan Hadir").length;
+
+            document.getElementById('count-hadir').textContent = hadir;
+            document.getElementById('count-ragu').textContent = ragu;
+            document.getElementById('count-absen').textContent = absen;
+        }
+
+        function formatRelativeTime(timestampStr) {
+            if (!timestampStr) return "Baru saja";
+            const parsed = new Date(timestampStr);
+            if (isNaN(parsed.getTime())) return timestampStr;
+
+            const diffSec = Math.floor((Date.now() - parsed.getTime()) / 1000);
+            if (diffSec < 60) return "Baru saja";
+            const diffMin = Math.floor(diffSec / 60);
+            if (diffMin < 60) return `${diffMin} menit yang lalu`;
+            const diffHour = Math.floor(diffMin / 60);
+            if (diffHour < 24) return `${diffHour} jam yang lalu`;
+            const diffDay = Math.floor(diffHour / 24);
+            return `${diffDay} hari yang lalu`;
+        }
+
+        async function loadWishesFromSheet() {
+            const container = document.getElementById('wishes-list');
+            if (!isScriptConfigured()) {
+                renderWishes();
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="text-center py-6 text-slate-400 text-xs flex flex-col items-center gap-2">
+                    <i class="fa-solid fa-circle-notch fa-spin text-babyblue-500 text-xl"></i>
+                    <span>Memuat doa & ucapan...</span>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(SCRIPT_URL, { method: 'GET' });
+                const result = await response.json();
+                if (result && result.status === 'success' && Array.isArray(result.data)) {
+                    wishesData = result.data.map(row => ({
+                        name: row.name,
+                        status: row.status,
+                        message: row.message,
+                        time: formatRelativeTime(row.timestamp)
+                    }));
+                }
+            } catch (err) {
+                console.warn("Gagal memuat dari Spreadsheet, menampilkan data lokal:", err);
+            }
+            renderWishes();
+        }
+
+        function renderWishes() {
+            const container = document.getElementById('wishes-list');
+            container.innerHTML = '';
+            updateAttendanceCounters();
+
+            if (wishesData.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 text-slate-400 text-xs">
+                        Belum ada ucapan. Jadilah yang pertama mengirimkan doa terbaik!
+                    </div>
+                `;
+                return;
+            }
+
+            wishesData.forEach(item => {
+                let badgeColor = 'bg-amber-100 text-amber-700';
+                if (item.status === 'InsyaAllah Hadir') badgeColor = 'bg-emerald-100 text-emerald-700';
+                if (item.status === 'Berhalangan Hadir') badgeColor = 'bg-rose-100 text-rose-700';
+
+                const card = document.createElement('div');
+                card.className = 'bg-white/90 p-4 rounded-2xl border border-babyblue-100 shadow-sm';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2 mb-1.5">
+                        <span class="font-display font-bold text-babyblue-900 text-sm">${escapeHtml(item.name)}</span>
+                        <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${badgeColor}">${escapeHtml(item.status)}</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-600 leading-relaxed mb-1.5">${escapeHtml(item.message)}</p>
+                    <span class="text-[10px] text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${escapeHtml(item.time)}</span>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function submitWish(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('sender-name');
+            const attendanceInput = document.getElementById('sender-attendance');
+            const messageInput = document.getElementById('sender-message');
+            const submitBtn = document.getElementById('submit-wish-btn');
+            const submitIcon = document.getElementById('submit-wish-icon');
+            const submitText = document.getElementById('submit-wish-text');
+
+            const newWish = {
+                name: nameInput.value.trim(),
+                status: attendanceInput.value,
+                message: messageInput.value.trim()
+            };
+
+            if (!newWish.name || !newWish.message) return;
+
+            // Ubah status tombol saat proses pengiriman
+            submitBtn.disabled = true;
+            submitIcon.className = "fa-solid fa-circle-notch fa-spin";
+            submitText.textContent = "Mengirim Doa...";
+
+            if (isScriptConfigured()) {
+                try {
+                    // Menggunakan Content-Type text/plain agar lolos CORS preflight dari GitHub Pages / Vercel
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify(newWish)
+                    });
+
+                    const result = await response.json();
+                    if (result.status === 'success') {
+                        await loadWishesFromSheet();
+                    } else {
+                        throw new Error(result.message || "Gagal menyimpan");
+                    }
+                } catch (err) {
+                    console.error("Error saat mengirim ke Spreadsheet:", err);
+                    // Tetap tampilkan di layar pengguna meskipun koneksi tertunda
+                    wishesData.unshift({ ...newWish, time: "Baru saja" });
+                    renderWishes();
+                }
+            } else {
+                wishesData.unshift({ ...newWish, time: "Baru saja" });
+                renderWishes();
+            }
+
+            nameInput.value = '';
+            messageInput.value = '';
+            submitBtn.disabled = false;
+            submitIcon.className = "fa-solid fa-paper-plane";
+            submitText.textContent = "Kirim Doa Terbaik";
+            showToast("Terima kasih atas doa & ucapan terbaiknya!");
+        }
+
+        // Muat data dari Spreadsheet saat halaman dibuka
+        window.addEventListener('DOMContentLoaded', () => {
+            loadWishesFromSheet();
+        });
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag]));
+        }
+
+        // 9. Scroll Reveal Observer
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.12 });
+
+            reveals.forEach(el => observer.observe(el));
+        }
+    </script>
+</body>
+</html>
